@@ -1,0 +1,9 @@
+[submodule "abot-backend"]
+	path = abot-backend
+	url = https://github.com/repo-master/abot-backend
+[submodule "abot-rasa"]
+	path = abot-rasa
+	url = https://github.com/repo-master/abot-rasa
+[submodule "abot-frontend"]
+	path = abot-frontend
+	url = https://github.com/repo-master/abot-frontend
