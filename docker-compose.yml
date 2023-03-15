@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+  #Rasa actions server
+  rasa_actions:
+    image: rasa/rasa:3.4.4-full
+    ports:
+      - 5055:5055
+    volumes:
+      - ./:/app
+    command:
+      - run
+      - actions
+  #frontend:
+  #  image: dockerfile
+  #backend:
