@@ -1,15 +1,13 @@
 version: '3.0'
 services:
-  #Rasa actions server
-  rasa_actions:
-    image: rasa/rasa:3.4.4-full
-    ports:
-      - 5055:5055
-    volumes:
-      - ./:/app
-    command:
-      - run
-      - actions
-  #frontend:
-  #  image: dockerfile
-  #backend:
+  abot_actions:
+    image: abot/actions
+    build:
+      dockerfile: ./abot-rasa/Dockerfile.actions
+  frontend:
+    image: abot/frontend
+    build:
+      dockerfile: ./abot-frontend/Dockerfile.prod
+  backend:
+    image: abot/backend
+    build: ./abot-backend
