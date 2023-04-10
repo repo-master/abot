@@ -3,12 +3,12 @@ services:
   abot_actions:
     image: abot/actions
     build:
-      context: abot_actions
+      context: abot-rasa
       dockerfile: ./abot-rasa/Dockerfile.actions
   frontend:
     image: abot/frontend
     build:
-      context: frontend
+      context: abot-frontend
       dockerfile: ./abot-frontend/Dockerfile.prod
   backend:
     image: abot/backend
