@@ -1,15 +1,47 @@
 version: '3.0'
+
 services:
-  abot_actions:
+  nginx:
+    image: nginx:1.23.4-alpine
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: ${SERVER_PORT:80}
+    volumes:
+      # Replace default.conf file with our own
+      - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
+      # Volume used to build frontend (used as document root)
+      - abot-build:/app/abot-frontend
+    ports:
+      - ${SERVER_PORT}:80
+    networks:
+      - my-network
+    depends_on:
+      - frontend
+
+  frontend:
+    image: abot/frontend
+    build:
+      context: ./abot-frontend/
+      dockerfile: Dockerfile.prod
+    volumes:
+      - abot-build:/app
+
+  actions:
     image: abot/actions
     build:
       context: ./abot-rasa
       dockerfile: ./Dockerfile.actions
-  frontend:
-    image: abot/frontend
-    build:
-      context: ./abot-frontend
-      dockerfile: ./Dockerfile.prod
+    networks:
+      - my-network
+
   backend:
     image: abot/backend
     build: ./abot-backend
+    networks:
+      - my-network
+
+volumes:
+  abot-build:
+
+networks:
+  my-network:
