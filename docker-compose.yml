@@ -43,6 +43,7 @@ services:
       ENDPOINTS_FILE: ${ENDPOINTS_FILE}
       CREDENTIALS_FILE: ${CREDENTIALS_FILE}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      DB_URI: ${DB_URI}
     build:
       context: ./abot-backend/
       dockerfile: ./Dockerfile.prod
