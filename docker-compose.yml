@@ -34,6 +34,8 @@ services:
       dockerfile: ./Dockerfile.actions
     networks:
       - my-network
+    ports:
+      - "5055:5055"
 
   # Backend for API endpoints and Chatbot model runner
   backend:
