@@ -31,6 +31,7 @@ services:
     image: abot/rasa
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      RASA_ACTION_ENDPOINT: ${ACTIONS_ENDPOINT_BASE}
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.rasa
@@ -58,6 +59,8 @@ services:
     image: abot/backend
     environment:
       WEB_CONCURRENCY: ${WEB_CONCURRENCY}
+      RASA_REST_ENDPOINT_BASE: ${RASA_REST_ENDPOINT_BASE}
+      ACTIONS_ENDPOINT_BASE: ${ACTIONS_ENDPOINT_BASE}
       DB_URI: ${DB_URI}
     build:
       context: ./abot-backend/
