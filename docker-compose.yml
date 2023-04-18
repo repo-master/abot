@@ -9,9 +9,9 @@ services:
       # Replace default.conf file with our own
       - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
       # Volume used to build frontend (used as document root)
-      - abot-build:/app/abot-frontend
+      - build_vol:/app/abot-frontend
     ports:
-      - "${SERVER_PORT}:80"
+      - $SERVER_PORT:80
     networks:
       - my-network
     depends_on:
@@ -23,55 +23,61 @@ services:
     build:
       context: ./abot-frontend/
       dockerfile: Dockerfile.prod
+      args:
+        - "REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT"
     volumes:
-      - abot-build:/app
+      - build_vol:/app
 
   # Rasa server
   rasa:
     image: abot/rasa
     environment:
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      RASA_ACTION_ENDPOINT: ${RASA_ACTION_ENDPOINT}
+      - TELEGRAM_BOT_TOKEN
+      - RASA_ACTION_ENDPOINT
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.rasa
       args:
-        ENDPOINTS_FILE: ${ENDPOINTS_FILE}
-        CREDENTIALS_FILE: ${CREDENTIALS_FILE}
+        - "ENDPOINTS_FILE=$ENDPOINTS_FILE"
+        - "CREDENTIALS_FILE=$CREDENTIALS_FILE"
     networks:
       - my-network
-    ports:
-      - "5005:5005"
+    expose:
+      - 5005
 
   # Actions server
   actions:
     image: abot/actions
+    environment:
+      BACKEND_ENDPOINT_BASE: ${BACKEND_ENDPOINT_BASE}
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.actions
     networks:
       - my-network
-    ports:
-      - "5055:5055"
+    expose:
+      - 5055
 
   # Backend for API endpoints and Chatbot model runner
   backend:
     image: abot/backend
     environment:
-      WEB_CONCURRENCY: ${WEB_CONCURRENCY}
-      RASA_REST_ENDPOINT_BASE: ${RASA_REST_ENDPOINT_BASE}
-      ACTIONS_ENDPOINT_BASE: ${ACTIONS_ENDPOINT_BASE}
-      DB_URI: ${DB_URI}
+      - WEB_CONCURRENCY
+      - RASA_REST_ENDPOINT_BASE
+      - ACTIONS_ENDPOINT_BASE
+      - DB_URI
     build:
       context: ./abot-backend/
       dockerfile: ./Dockerfile.prod
     ports:
-      - "${BACKEND_PORT}:8080"
+      - "$BACKEND_PORT:8080"
+    expose:
+      - 8080
     networks:
       - my-network
 
 volumes:
-  abot-build:
+  build_vol:
 
 networks:
   my-network:
