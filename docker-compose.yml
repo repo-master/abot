@@ -26,6 +26,22 @@ services:
     volumes:
       - abot-build:/app
 
+  # Rasa server
+  rasa:
+    image: abot/rasa
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    build:
+      context: ./abot-rasa/
+      dockerfile: ./Dockerfile.rasa
+      args:
+        ENDPOINTS_FILE: ${ENDPOINTS_FILE}
+        CREDENTIALS_FILE: ${CREDENTIALS_FILE}
+    networks:
+      - my-network
+    ports:
+      - "5005:5005"
+
   # Actions server
   actions:
     image: abot/actions
@@ -42,9 +58,6 @@ services:
     image: abot/backend
     environment:
       WEB_CONCURRENCY: ${WEB_CONCURRENCY}
-      ENDPOINTS_FILE: ${ENDPOINTS_FILE}
-      CREDENTIALS_FILE: ${CREDENTIALS_FILE}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       DB_URI: ${DB_URI}
     build:
       context: ./abot-backend/
