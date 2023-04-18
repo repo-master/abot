@@ -31,7 +31,7 @@ services:
     image: abot/rasa
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      RASA_ACTION_ENDPOINT: ${ACTIONS_ENDPOINT_BASE}
+      RASA_ACTION_ENDPOINT: ${RASA_ACTION_ENDPOINT}
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.rasa
