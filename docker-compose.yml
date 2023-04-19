@@ -75,6 +75,22 @@ services:
       - 8080
     networks:
       - my-network
+    depends_on:
+      - postgres
+
+  # Postgres Database
+  postgres:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    ports:
+      - "$POSTGRES_PORT:5432"
+    expose:
+      - 5432
+    networks:
+      - my-network
 
 volumes:
   build_vol:
