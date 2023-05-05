@@ -34,6 +34,7 @@ services:
     environment:
       - TELEGRAM_BOT_TOKEN
       - RASA_ACTION_ENDPOINT
+      - RASA_DUCKLING_HTTP_URL
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.rasa
@@ -77,6 +78,16 @@ services:
       - my-network
     depends_on:
       - postgres
+
+  # Duckling server
+  duckling:
+    image: rasa/duckling
+    expose:
+      - 8000
+    ports:
+      - "8092:8000"
+    networks:
+      - my-network
 
   # Postgres Database
   postgres:
