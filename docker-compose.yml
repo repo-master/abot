@@ -50,7 +50,8 @@ services:
   actions:
     image: abot/actions
     environment:
-      BACKEND_ENDPOINT_BASE: ${BACKEND_ENDPOINT_BASE}
+    - BACKEND_ENDPOINT_BASE
+    - RASA_DUCKLING_HTTP_URL
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.actions
