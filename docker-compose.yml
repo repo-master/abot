@@ -35,12 +35,18 @@ services:
       - TELEGRAM_BOT_TOKEN
       - RASA_ACTION_ENDPOINT
       - RASA_DUCKLING_HTTP_URL
+      - "POSTGRESQL_SCHEMA=$RASA_TRACKER_STORE_PGSQL_SCHEMA"
+      - RASA_TRACKER_DB_URI
+    command:
+      - run
+      - "--endpoints"
+      - "endpoints.test.yml"
+      - "--credentials"
+      - "credentials.test.yml"
+      - "-vv"
     build:
       context: ./abot-rasa/
       dockerfile: ./Dockerfile.rasa
-      args:
-        - "ENDPOINTS_FILE=$ENDPOINTS_FILE"
-        - "CREDENTIALS_FILE=$CREDENTIALS_FILE"
     networks:
       - my-network
     expose:
@@ -67,7 +73,7 @@ services:
       - WEB_CONCURRENCY
       - RASA_REST_ENDPOINT_BASE
       - ACTIONS_ENDPOINT_BASE
-      - DB_URI
+      - "DB_URI=$BACKEND_DB_URI"
     build:
       context: ./abot-backend/
       dockerfile: ./Dockerfile.prod
